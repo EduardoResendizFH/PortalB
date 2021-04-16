@@ -9,4 +9,6 @@ const express = require('express'),
 
       app.post('/signin', authController.signin);
 
+      app.get('/readUser', authController.verifyToken);
+
       module.exports = app;

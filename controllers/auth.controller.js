@@ -1,5 +1,3 @@
-const { log } = require('console');
-const Role = require('../models/Role');
 const user = require('../models/user'),
       userModel = require('../models/user'),
       config = require('../server/config'),
@@ -7,21 +5,16 @@ const user = require('../models/user'),
       jwt = require('jsonwebtoken');
 
 const signup = async (req, res) =>{
-    const {username, email, password, roles} = req.body;
+    const {username, email, password, role} = req.body;
 
   const newUser =  new user({ 
         username,
         email,
-        password: await userModel.encryptPassword(password)
+        password: await userModel.encryptPassword(password),
+        role
     });
 
-    if (roles) {
-        const foundRoles = await RoleModel.find({name: {$in: roles}});
-        newUser.roles = foundRoles.map(role => role._id);
-    } else {
-        const role = await RoleModel.findOne({name: "user"});
-        newUser.roles = [role._id];
-    }
+   
 
     const savedUser = await newUser.save();
     console.log(savedUser);
@@ -49,7 +42,29 @@ const signin = async (req, res) =>{
         expiresIn: 86400 //24Horas
     })
    
-   res.json({token});
+   res.json({token, userFound});
 };
 
-module.exports = {signup, signin};
+const verifyToken = async (req, res) =>{
+    try {
+        const token = req.headers["x-access-token"];
+        console.log(token);
+    
+        if (!token) return res.status(403).json({message: "No token provided"});
+    
+        const decode = jwt.verify(token, config.SECRET);
+        req.id = decode.id;
+    
+        const user = await userModel.findById(req.id, {password: 0});
+        if(!user) return res.status(404).json({message: 'No user found'});
+        res.status(200).json({
+            ok:true,
+            user,
+            message:'exitoso'
+        })
+    } catch (error) {
+        return res.status(401).json({message: 'Unauthorized'});
+    }
+}
+
+module.exports = {signup, signin, verifyToken};

@@ -1,3 +1,5 @@
+const { strict } = require('assert');
+
  const mongoose = require('mongoose'),
        Schema = mongoose.Schema,
        bcrypt = require('bcryptjs'); 
@@ -16,12 +18,11 @@
             type: String,
             required: true
         },
-        roles:[
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Role"
+        role:{
+                type:String,
+                required: true
             }
-        ]
+        
     },{
         timestamps: true,
         versionKey: false
