@@ -21,22 +21,22 @@ const verifyToken = async (req, res, next) =>{
     }
 }
 
-const isMoredator = async (req, res, next) =>{
-        const user = await userModel.findById(req.id);
-        const roles = await Role.find({_id: {$in: user.roles}});
-       // console.log(roles);
+// const isMoredator = async (req, res, next) =>{
+//         const user = await userModel.findById(req.id);
+//         const roles = await Role.find({_id: {$in: user.roles}});
+//        // console.log(roles);
     
-        for (let i = 0; i < roles.length; i++) {
-            if (roles[i].name === "moderator") {
-                res.status(200).json({ message: "Exitoso!!!! Moderator"});
-                next();
-                return;
-            }
-        } 
+//         for (let i = 0; i < roles.length; i++) {
+//             if (roles[i].name === "moderator") {
+//                 res.status(200).json({ message: "Exitoso!!!! Moderator"});
+//                 next();
+//                 return;
+//             }
+//         } 
     
-        return res.status(403).json({ message: "requieres ser moderador ROL"});
+//         return res.status(403).json({ message: "requieres ser moderador ROL"});
     
-};
+// };
 
 const isAdmin = async (req, res, next) =>{
 
@@ -54,4 +54,4 @@ const isAdmin = async (req, res, next) =>{
     return res.status(202).json({ message: "requieres ser administrador"});
 }
 
-module.exports = {verifyToken, isAdmin, isMoredator};
+module.exports = {verifyToken, isAdmin};

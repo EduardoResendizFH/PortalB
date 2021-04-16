@@ -8,7 +8,14 @@ const express = require('express'),
       userRoutes = require('../routes/user.routes'),
       cors = require('cors'),
       bodyParser = require('body-parser'),
-      authRoutes = require('../routes/auth.routes') ;
+      authRoutes = require('../routes/auth.routes'),
+      clienteRuta = require('../routes/cliente.routes'),
+      operadorRuta = require('../routes/operador.routes'),
+      nominacionRuta = require('../routes/nominacion.routes'),
+      autotanqueRuta = require('../routes/autoTanque.routes'),
+      productosStaticos = require('../routes/productsStaticts.routes'),
+      licenciaRuta = require('../routes/licencia.routes'),
+      saldoOperacionRuta = require('../routes/saldoOperacion.routes');
 const app = express();
 createRoles();
 
@@ -30,8 +37,18 @@ app.get('/', (req, res) =>{
     })
 });
 
+//Mostrar imagenes de carpetas
+app.use('/lic', express.static('public/uploads/licenciaOperador'));
+
 app.use('/products', products);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/cliente', clienteRuta);
+app.use('/api/operador', operadorRuta);
+app.use('/api/nominacion', nominacionRuta);
+app.use('/api/autotanque', autotanqueRuta);
+app.use('/api/productos', productosStaticos);
+app.use('/api/licencia', licenciaRuta);
+app.use('/api/saldo', saldoOperacionRuta);
 
 module.exports = app;
